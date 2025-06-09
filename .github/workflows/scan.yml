@@ -1,0 +1,21 @@
+name: Scan PagerDuty Automation
+
+on:
+  schedule:
+    - cron: "0 0 * * *"  # Daily at midnight UTC
+
+jobs:
+  scan:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Set up Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: '3.x'
+      - name: Install dependencies
+        run: pip install --upgrade pip && pip install -r requirements.txt
+      - name: Run scan
+        run: python cli.py --start "$(date -u -Iseconds -d '1 day ago')" --end "$(date -u -Iseconds)"
+      - name: Create GitHub Issue
+        run: echo "TODO: Implement publishing results to GitHub Issues"
